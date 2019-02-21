@@ -1,0 +1,11 @@
+/src
+/reports
+/coverage
+/.github
+test
+/build
+/typings
+.vscode
+/coverage
+/.nyc_output
+!/lib

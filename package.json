@@ -1,0 +1,80 @@
+{
+  "name": "sp-typed-item",
+  "version": "0.0.1",
+  "description": "Generates strongly typed classes based on your SharePoint lists",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json -w",
+    "cli": "ts-node src/index.ts",
+    "test:dev": "mocha --watch-extensions ts --watch",
+    "test": "mocha",
+    "coverage": "nyc --report-dir coverage/output mocha"
+  },
+  "bin": {
+    "sp-item": "lib/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-KaiNet/sp-typed-item.git"
+  },
+  "keywords": [
+    "sharepoint"
+  ],
+  "author": "Sergei Sergeev <sergeev.srg@gmail.com> (https://github.com/s-KaiNet)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/s-KaiNet/sp-typed-item/issues"
+  },
+  "mocha": {
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ],
+    "bail": true,
+    "fullTrace": true,
+    "recursive": true,
+    "spec": "test/*.ts"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "html",
+      "text-summary"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "homepage": "https://github.com/s-KaiNet/sp-typed-item#readme",
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.9.4",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.0",
+    "node-sp-auth": "^2.5.7",
+    "nyc": "^13.3.0",
+    "sinon": "^7.2.4",
+    "source-map-support": "^0.5.10",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.12.1",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "@types/sharepoint": "^2016.1.2",
+    "commander": "^2.19.0",
+    "ejs": "^2.6.1",
+    "node-sp-auth-config": "^2.6.0",
+    "sp-request": "^2.1.3"
+  }
+}
