@@ -18,19 +18,23 @@
             "request": "launch",
             "name": "Launch CLI",
             "program": "${workspaceFolder}\\lib\\cli.js",
-            "args": ["--file myfile.txt"],
+            "args": [
+                "--file myfile.txt"
+            ],
             "outFiles": [
                 "${workspaceFolder}/lib/**/*.js"
             ]
         },
         {
-			"name": "Run mocha",
-			"type": "node",
-			"request": "launch",
-			"program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-			"stopOnEntry": false,
-			"cwd": "${workspaceRoot}",
-			"protocol": "inspector"
-		}
+            "name": "Mocha tests",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "args": ["-r", "ts-node/register", "--no-timeouts", "test/**/*spec.ts"],
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+            "internalConsoleOptions": "openOnSessionStart",
+            "smartStep": false
+        }
     ]
 }

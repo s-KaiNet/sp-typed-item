@@ -10,7 +10,7 @@ export class DataFilter {
             return null;
         }
         let lists = await this.service.getLists();
-        let serverRelativeUrl = await this.service.getWebServerRelativeUrl();
+        // let serverRelativeUrl = await this.service.getWebServerRelativeUrl();
 
         let entities: Entity[] = [];
 

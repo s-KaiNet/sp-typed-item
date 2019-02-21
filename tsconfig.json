@@ -5,6 +5,7 @@
     "sourceMap": true,
     "declaration": true,
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "noImplicitAny": true,
     "removeComments": true,
     "outDir": "./lib",
