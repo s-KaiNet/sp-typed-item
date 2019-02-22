@@ -1,7 +1,7 @@
-export function ensureTrailingSlash(url: string): string {
-    if (!url.endsWith('/')) {
-        return url + '/';
+export function removeSlashes(url: string): string {
+    if (!url) {
+        return url;
     }
 
-    return url;
+    return url.replace(/^\/+|\/+$/g, '');
 }

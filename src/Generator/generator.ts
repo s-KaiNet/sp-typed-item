@@ -1,5 +1,5 @@
 import { AuthConfig } from 'node-sp-auth-config';
-import { ensureTrailingSlash } from '../Common/utils';
+import { removeSlashes } from '../Common/utils';
 import { Config } from '../Interfaces/config';
 import { SpService } from '../Common/spService';
 import { DataFilter } from '../Filters/dataFilter';
