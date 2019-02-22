@@ -1,14 +1,14 @@
-import { ListSetting } from '../Interfaces/listSetting';
-import { SpService } from '../Common/spService';
-import { Entity } from '../Interfaces/output/entity';
-import { removeSlashes } from '../Common/utils';
-import { Field } from '../Interfaces/field';
-import { FieldSetting } from '../Interfaces/fieldSetting';
-import { Field as FieldEntity } from '../Interfaces/output/field';
-import { ContentTypeSetting } from '../Interfaces/contentTypeSetting';
+import { ListSetting } from '../Interfaces/FistSetting';
+import { SPService } from '../Common/SPService';
+import { Entity } from '../Interfaces/output/Entity';
+import { removeSlashes } from '../Common/Utils';
+import { Field } from '../Interfaces/Field';
+import { FieldSetting } from '../Interfaces/FieldSetting';
+import { Field as FieldEntity } from '../Interfaces/output/Field';
+import { ContentTypeSetting } from '../Interfaces/ContentTypeSetting';
 
 export class DataFilter {
-    constructor(private service: SpService) { }
+    constructor(private service: SPService) { }
 
     public async filterLists(listSettings?: ListSetting[]): Promise<Entity[]> {
         if (!listSettings || listSettings.length === 0) {

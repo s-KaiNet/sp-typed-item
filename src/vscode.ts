@@ -1,1 +1,3 @@
-process.env['SP_ITEM_VSCODE'] = '1';
+import { VSCODE_INDICATOR } from './Common/Consts';
+
+process.env[VSCODE_INDICATOR] = '1';

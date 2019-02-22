@@ -1,4 +1,4 @@
-import { Folder } from './folder';
+import { Folder } from './Folder';
 
 export interface List {
     Hidden: boolean;

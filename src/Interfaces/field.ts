@@ -1,4 +1,4 @@
-import { FieldType } from '../types/sp';
+import { FieldType } from '../types/SP';
 
 export interface Field {
     Id: string;

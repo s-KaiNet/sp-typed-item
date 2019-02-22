@@ -10,7 +10,8 @@
     "title": "The Items Schema",
     "required": [
       "siteUrl",
-      "outputPath"
+      "outputPath",
+      "authConfigPath"
     ],
     "properties": {
       "siteUrl": {

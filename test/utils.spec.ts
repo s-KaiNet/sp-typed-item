@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { removeSlashes } from '../src/Common/utils';
+import { removeSlashes } from '../src/Common/Utils';
 
 describe('Utils tests', () => {
 

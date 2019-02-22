@@ -1,5 +1,5 @@
-import { ListSetting } from './listSetting';
-import { ContentTypeSetting } from './contentTypeSetting';
+import { ListSetting } from './FistSetting';
+import { ContentTypeSetting } from './ContentTypeSetting';
 
 export interface Config {
     siteUrl: string;

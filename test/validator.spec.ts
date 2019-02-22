@@ -1,7 +1,7 @@
-import { JsonSchemaValidator } from '../src/JsonValidation/jsonSchemaValidator';
+import { JsonSchemaValidator } from '../src/JsonValidation/JsonSchemaValidator';
 
 import { expect } from 'chai';
-import { Config } from '../src/Interfaces/config';
+import { Config } from '../src/Interfaces/Config';
 
 describe('Validator tests', () => {
     it('should not validate empty object', () => {

@@ -1,6 +1,7 @@
-import { Logger } from './logger';
-import { VSCodeLogger } from './vscodeLogger';
-import { ConsoleLogger } from './consoleLogger';
+import { Logger } from './Logger';
+import { VSCodeLogger } from './VSCodeLogger';
+import { ConsoleLogger } from './ConsoleLogger';
+import { VSCODE_INDICATOR } from '../Common/Consts';
 
 export class LogManager {
 
@@ -21,6 +22,6 @@ export class LogManager {
     }
 
     private static isVSCode(): boolean {
-        return !!process.env['SP_ITEM_VSCODE'];
+        return !!process.env[VSCODE_INDICATOR];
     }
 }

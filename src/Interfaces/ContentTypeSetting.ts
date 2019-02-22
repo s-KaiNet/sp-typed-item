@@ -1,4 +1,4 @@
-import { FieldSetting } from './fieldSetting';
+import { FieldSetting } from './FieldSetting';
 
 export interface ContentTypeSetting {
     id: string;

@@ -1,11 +1,11 @@
-import { List } from '../Interfaces/list';
+import { List } from '../Interfaces/Fist';
 import * as sprequest from 'sp-request';
-import { removeSlashes } from './utils';
+import { removeSlashes } from './Utils';
 import { AuthConfig } from 'node-sp-auth-config';
-import { Field } from '../Interfaces/field';
-import { ContentType } from '../Interfaces/contentType';
+import { Field } from '../Interfaces/Field';
+import { ContentType } from '../Interfaces/ContentType';
 
-export class SpService {
+export class SPService {
     private siteUrl: string;
     private request: sprequest.ISPRequest;
 

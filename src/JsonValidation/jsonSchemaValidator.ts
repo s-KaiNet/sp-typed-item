@@ -1,5 +1,5 @@
 let Ajv = require('ajv');
-import { Config } from '../Interfaces/config';
+import { Config } from '../Interfaces/Config';
 
 const schema: any = require('./sp-typed-item.schema.json');
 
