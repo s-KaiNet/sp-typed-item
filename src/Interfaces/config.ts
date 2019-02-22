@@ -1,5 +1,5 @@
 import { ListSetting } from './listSetting';
-import { ContentTypeSetting } from './ContentTypeSetting';
+import { ContentTypeSetting } from './contentTypeSetting';
 
 export interface Config {
     siteUrl: string;

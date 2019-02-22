@@ -1,0 +1,160 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "array",
+  "title": "The Root Schema",
+  "items": {
+    "$id": "#/items",
+    "type": "object",
+    "title": "The Items Schema",
+    "required": [
+      "siteUrl",
+      "outputPath"
+    ],
+    "properties": {
+      "siteUrl": {
+        "$id": "#/items/properties/siteUrl",
+        "type": "string",
+        "title": "The Siteurl Schema",
+        "default": "",
+        "examples": [
+          "https://some.site.com"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "authConfigPath": {
+        "$id": "#/items/properties/authConfigPath",
+        "type": "string",
+        "title": "The Authconfigpath Schema",
+        "default": "",
+        "examples": [
+          "./config/private.auth.json"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "outputPath": {
+        "$id": "#/items/properties/outputPath",
+        "type": "string",
+        "title": "The Outputpath Schema",
+        "default": "",
+        "examples": [
+          "./src/Generated"
+        ],
+        "pattern": "^(.*)$"
+      },
+      "lists": {
+        "$id": "#/items/properties/lists",
+        "type": "array",
+        "title": "The Lists Schema",
+        "items": {
+          "$id": "#/items/properties/lists/items",
+          "type": "object",
+          "title": "The Items Schema",
+          "required": [
+            "url"
+          ],
+          "properties": {
+            "url": {
+              "$id": "#/items/properties/lists/items/properties/url",
+              "type": "string",
+              "title": "The Url Schema",
+              "default": "",
+              "examples": [
+                "lists/mylist"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "fields": {
+              "$id": "#/items/properties/lists/items/properties/fields",
+              "type": "object",
+              "title": "The Fields Schema",
+              "properties": {
+                "excludeHidden": {
+                  "$id": "#/items/properties/lists/items/properties/fields/properties/excludeHidden",
+                  "type": "boolean",
+                  "title": "The Excludehidden Schema",
+                  "default": false,
+                  "examples": [
+                    true
+                  ]
+                },
+                "exclude": {
+                  "$id": "#/items/properties/lists/items/properties/fields/properties/exclude",
+                  "type": "array",
+                  "title": "The Exclude Schema",
+                  "items": {
+                    "$id": "#/items/properties/lists/items/properties/fields/properties/exclude/items",
+                    "type": "string",
+                    "title": "The Items Schema",
+                    "default": "",
+                    "examples": [
+                      "Title"
+                    ],
+                    "pattern": "^(.*)$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "contentTypes": {
+        "$id": "#/items/properties/contentTypes",
+        "type": "array",
+        "title": "The Contenttypes Schema",
+        "items": {
+          "$id": "#/items/properties/contentTypes/items",
+          "type": "object",
+          "title": "The Items Schema",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "$id": "#/items/properties/contentTypes/items/properties/id",
+              "type": "string",
+              "title": "The Id Schema",
+              "default": "",
+              "examples": [
+                "0x001234545"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "fields": {
+              "$id": "#/items/properties/contentTypes/items/properties/fields",
+              "type": "object",
+              "title": "The Fields Schema",
+              "properties": {
+                "excludeHidden": {
+                  "$id": "#/items/properties/contentTypes/items/properties/fields/properties/excludeHidden",
+                  "type": "boolean",
+                  "title": "The Excludehidden Schema",
+                  "default": false,
+                  "examples": [
+                    true
+                  ]
+                },
+                "exclude": {
+                  "$id": "#/items/properties/contentTypes/items/properties/fields/properties/exclude",
+                  "type": "array",
+                  "title": "The Exclude Schema",
+                  "items": {
+                    "$id": "#/items/properties/contentTypes/items/properties/fields/properties/exclude/items",
+                    "type": "string",
+                    "title": "The Items Schema",
+                    "default": "",
+                    "examples": [
+                      "Title"
+                    ],
+                    "pattern": "^(.*)$"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

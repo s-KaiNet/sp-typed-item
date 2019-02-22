@@ -5,237 +5,436 @@ import { stub, restore } from 'sinon';
 import { List } from '../src/Interfaces/list';
 import { Field } from '../src/Interfaces/field';
 import { FieldType } from '../src/types/sp';
+import { ContentType } from '../src/Interfaces/contentType';
 
 describe('Data filter tests', () => {
     afterEach(() => {
         restore();
     });
 
-    it('should return null for empty list settings', async () => {
-        let service = new SpService('', '');
-        let dataFilter = new DataFilter(service);
+    describe('List filter test', () => {
 
-        let value = await dataFilter.filterLists();
+        it('should return null for empty list settings', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
 
-        expect(value.length).equal(0);
+            let value = await dataFilter.filterLists();
+
+            expect(value.length).equal(0);
+        });
+
+        it('should return empty when no lists', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([]));
+
+            let value = await dataFilter.filterLists({} as any);
+
+            expect(value.length).equal(0);
+        });
+
+        it('should return one list #1', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: 'sites/dev/Lists/MyList'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('/sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([]));
+
+            let value = await dataFilter.filterLists([{
+                url: 'Lists/MyList'
+            }]);
+
+            expect(value.length).equal(1);
+        });
+
+        it('should return one list #2', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList/'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([]));
+
+            let value = await dataFilter.filterLists([{
+                url: 'Lists/MyList'
+            }]);
+
+            expect(value.length).equal(1);
+        });
+
+        it('should return one list #3', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList/'
+                },
+                Title: 'List'
+            },
+            {
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList2/'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([]));
+
+            let value = await dataFilter.filterLists([{
+                url: 'Lists/MyList'
+            }]);
+
+            expect(value.length).equal(1);
+        });
+
+        it('should return two lists', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList/'
+                },
+                Title: 'List'
+            },
+            {
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList2/'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([]));
+
+            let value = await dataFilter.filterLists([{
+                url: '/Lists/MyList'
+            },
+            {
+                url: 'Lists/MyList2/'
+            }]);
+
+            expect(value.length).equal(2);
+        });
+
+        it('should return zero field (excluded by internal name)', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList/'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([{
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: false,
+                Id: ''
+            } as Field]));
+
+            let value = await dataFilter.filterLists([{
+                url: '/Lists/MyList',
+                fields: {
+                    exclude: ['Id']
+                }
+            }]);
+
+            expect(value[0].fields.length).equal(0);
+        });
+
+        it('should return one field (not excluded by internal name)', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList/'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([{
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: false,
+                Id: ''
+            } as Field, {
+                InternalName: 'MyF',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: false,
+                Id: ''
+            } as Field]));
+
+            let value = await dataFilter.filterLists([{
+                url: '/Lists/MyList',
+                fields: {
+                    exclude: ['Id']
+                }
+            }]);
+
+            expect(value[0].fields.length).equal(1);
+        });
+
+        it('should return zero field (excluded by Hidden prop)', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList/'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([{
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: true,
+                Id: ''
+            } as Field]));
+
+            let value = await dataFilter.filterLists([{
+                url: '/Lists/MyList',
+                fields: {
+                    exclude: ['Id'],
+                    excludeHidden: true
+                }
+            }]);
+
+            expect(value[0].fields.length).equal(0);
+        });
+
+        it('should return one field (mix of excluded by Hidden and InternalName)', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList/'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([{
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: true,
+                Id: ''
+            } as Field,
+            {
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: false,
+                Id: ''
+            } as Field,
+            {
+                InternalName: 'MyF',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: false,
+                Id: ''
+            } as Field]));
+
+            let value = await dataFilter.filterLists([{
+                url: '/Lists/MyList',
+                fields: {
+                    exclude: ['Id'],
+                    excludeHidden: true
+                }
+            }]);
+
+            expect(value[0].fields.length).equal(1);
+        });
+
+        it('should return all fields', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList/'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([{
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: false,
+                Id: ''
+            } as Field]));
+
+            let value = await dataFilter.filterLists([{
+                url: '/Lists/MyList'
+            }]);
+
+            expect(value[0].fields.length).equal(1);
+        });
+
+        it('should return one field (one excluded by Hidden prop)', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: '/sites/dev/Lists/MyList/'
+                },
+                Title: 'List'
+            }]));
+            stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
+            stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([{
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: true,
+                Id: ''
+            } as Field, {
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: false,
+                Id: ''
+            } as Field]));
+
+            let value = await dataFilter.filterLists([{
+                url: '/Lists/MyList',
+                fields: {
+                    excludeHidden: true
+                }
+            }]);
+
+            expect(value[0].fields.length).equal(1);
+        });
     });
 
-    it('should return empty when no lists', async () => {
-        let service = new SpService('', '');
-        let dataFilter = new DataFilter(service);
-        stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([]));
+    describe('Content type filter test', () => {
+        it('should return empty collection', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
 
-        let value = await dataFilter.filterLists({} as any);
+            let value = await dataFilter.filterConentTypes();
 
-        expect(value.length).equal(0);
-    });
+            expect(value.length).equal(0);
+        });
 
-    it('should return one list #1', async () => {
-        let service = new SpService('', '');
-        let dataFilter = new DataFilter(service);
-        stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
-            Hidden: false,
-            Id: 'id',
-            RootFolder: {
-                Name: '',
-                ServerRelativeUrl: 'sites/dev/Lists/MyList'
-            },
-            Title: 'List'
-        }]));
-        stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('/sites/dev/'));
-        stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([]));
+        it('should return empty collection', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getContentTypes').returns(Promise.resolve<ContentType[]>([]));
+            let value = await dataFilter.filterConentTypes();
 
-        let value = await dataFilter.filterLists([{
-            url: 'Lists/MyList'
-        }]);
+            expect(value.length).equal(0);
+        });
 
-        expect(value.length).equal(1);
-    });
+        it('should return one entity (no filters applied)', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getContentTypes').returns(Promise.resolve<ContentType[]>([{
+                Hidden: false,
+                Id: 'ct-id',
+                Name: 'Ct'
+            }]));
+            stub(SpService.prototype, 'getContentTypeFields').returns(Promise.resolve<Field[]>([{
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: true,
+                Id: ''
+            } as Field, {
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: false,
+                Id: ''
+            } as Field]));
 
-    it('should return one list #2', async () => {
-        let service = new SpService('', '');
-        let dataFilter = new DataFilter(service);
-        stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
-            Hidden: false,
-            Id: 'id',
-            RootFolder: {
-                Name: '',
-                ServerRelativeUrl: '/sites/dev/Lists/MyList/'
-            },
-            Title: 'List'
-        }]));
-        stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
-        stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([]));
+            let value = await dataFilter.filterConentTypes([{
+                id: 'ct-id',
+                fields: {
+                    excludeHidden: true
+                }
+            }]);
 
-        let value = await dataFilter.filterLists([{
-            url: 'Lists/MyList'
-        }]);
+            expect(value.length).equal(1);
+        });
 
-        expect(value.length).equal(1);
-    });
+        it('should return one entity (filter by Hidden)', async () => {
+            let service = new SpService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SpService.prototype, 'getContentTypes').returns(Promise.resolve<ContentType[]>([{
+                Hidden: false,
+                Id: 'ct-id',
+                Name: 'Ct'
+            }]));
+            stub(SpService.prototype, 'getContentTypeFields').returns(Promise.resolve<Field[]>([{
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: true,
+                Id: ''
+            } as Field, {
+                InternalName: 'Id',
+                EntityPropertyName: '',
+                FieldTypeKind: FieldType.integer,
+                Hidden: false,
+                Id: ''
+            } as Field]));
 
-    it('should return one list #3', async () => {
-        let service = new SpService('', '');
-        let dataFilter = new DataFilter(service);
-        stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
-            Hidden: false,
-            Id: 'id',
-            RootFolder: {
-                Name: '',
-                ServerRelativeUrl: '/sites/dev/Lists/MyList/'
-            },
-            Title: 'List'
-        },
-        {
-            Hidden: false,
-            Id: 'id',
-            RootFolder: {
-                Name: '',
-                ServerRelativeUrl: '/sites/dev/Lists/MyList2/'
-            },
-            Title: 'List'
-        }]));
-        stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
-        stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([]));
+            let value = await dataFilter.filterConentTypes([{
+                id: 'ct-id',
+                fields: {
+                    excludeHidden: true
+                }
+            }]);
 
-        let value = await dataFilter.filterLists([{
-            url: 'Lists/MyList'
-        }]);
-
-        expect(value.length).equal(1);
-    });
-
-    it('should return two lists', async () => {
-        let service = new SpService('', '');
-        let dataFilter = new DataFilter(service);
-        stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
-            Hidden: false,
-            Id: 'id',
-            RootFolder: {
-                Name: '',
-                ServerRelativeUrl: '/sites/dev/Lists/MyList/'
-            },
-            Title: 'List'
-        },
-        {
-            Hidden: false,
-            Id: 'id',
-            RootFolder: {
-                Name: '',
-                ServerRelativeUrl: '/sites/dev/Lists/MyList2/'
-            },
-            Title: 'List'
-        }]));
-        stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
-        stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([]));
-
-        let value = await dataFilter.filterLists([{
-            url: '/Lists/MyList'
-        },
-        {
-            url: 'Lists/MyList2/'
-        }]);
-
-        expect(value.length).equal(2);
-    });
-
-    it('should return zero field (excluded by internal name)', async () => {
-        let service = new SpService('', '');
-        let dataFilter = new DataFilter(service);
-        stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
-            Hidden: false,
-            Id: 'id',
-            RootFolder: {
-                Name: '',
-                ServerRelativeUrl: '/sites/dev/Lists/MyList/'
-            },
-            Title: 'List'
-        }]));
-        stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
-        stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([{
-            InternalName: 'Id',
-            EntityPropertyName: '',
-            FieldTypeKind: FieldType.integer,
-            Hidden: false,
-            Id: ''
-        } as Field]));
-
-        let value = await dataFilter.filterLists([{
-            url: '/Lists/MyList',
-            fields: {
-                exclude: ['Id']
-            }
-        }]);
-
-        expect(value[0].fields.length).equal(0);
-    });
-
-    it('should return one field (not excluded by internal name)', async () => {
-        let service = new SpService('', '');
-        let dataFilter = new DataFilter(service);
-        stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
-            Hidden: false,
-            Id: 'id',
-            RootFolder: {
-                Name: '',
-                ServerRelativeUrl: '/sites/dev/Lists/MyList/'
-            },
-            Title: 'List'
-        }]));
-        stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
-        stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([{
-            InternalName: 'Id',
-            EntityPropertyName: '',
-            FieldTypeKind: FieldType.integer,
-            Hidden: false,
-            Id: ''
-        } as Field, {
-            InternalName: 'MyF',
-            EntityPropertyName: '',
-            FieldTypeKind: FieldType.integer,
-            Hidden: false,
-            Id: ''
-        } as Field]));
-
-        let value = await dataFilter.filterLists([{
-            url: '/Lists/MyList',
-            fields: {
-                exclude: ['Id']
-            }
-        }]);
-
-        expect(value[0].fields.length).equal(1);
-    });
-
-    it('should return zero field (excluded by Hidden prop)', async () => {
-        let service = new SpService('', '');
-        let dataFilter = new DataFilter(service);
-        stub(SpService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
-            Hidden: false,
-            Id: 'id',
-            RootFolder: {
-                Name: '',
-                ServerRelativeUrl: '/sites/dev/Lists/MyList/'
-            },
-            Title: 'List'
-        }]));
-        stub(SpService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('sites/dev/'));
-        stub(SpService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([{
-            InternalName: 'Id',
-            EntityPropertyName: '',
-            FieldTypeKind: FieldType.integer,
-            Hidden: true,
-            Id: ''
-        } as Field]));
-
-        let value = await dataFilter.filterLists([{
-            url: '/Lists/MyList',
-            fields: {
-                exclude: ['Id'],
-                excludeHidden: true
-            }
-        }]);
-
-        expect(value[0].fields.length).equal(0);
+            expect(value[0].fields.length).equal(1);
+        });
     });
 });

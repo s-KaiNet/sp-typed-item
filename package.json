@@ -6,11 +6,13 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json -w",
     "cli": "ts-node src/index.ts",
-    "test:dev": "mocha --watch-extensions ts --watch",
     "test": "mocha",
-    "coverage": "nyc --report-dir coverage/output mocha"
+    "coverage": "nyc --report-dir coverage/output mocha",
+    "watch-test": "mocha --watch-extensions ts --watch",
+    "watch-ejs": "onchange \"src/**/*.ejs\" -- copyfiles -u 1 -V {{changed}} lib\"",
+    "watch-ts": "tsc -p tsconfig.json -w",
+    "watch": "concurrently npm:watch-*"
   },
   "bin": {
     "sp-item": "lib/cli.js"
@@ -61,9 +63,12 @@
     "@types/node": "^11.9.4",
     "@types/sinon": "^7.0.6",
     "chai": "^4.2.0",
+    "concurrently": "^4.1.0",
+    "copyfiles": "^2.1.0",
     "mocha": "^6.0.1",
     "node-sp-auth": "^2.5.7",
     "nyc": "^13.3.0",
+    "onchange": "^5.2.0",
     "sinon": "^7.2.4",
     "source-map-support": "^0.5.10",
     "ts-node": "^8.0.2",
@@ -73,6 +78,8 @@
   },
   "dependencies": {
     "@types/sharepoint": "^2016.1.2",
+    "ajv": "^6.9.1",
+    "chalk": "^2.4.2",
     "commander": "^2.19.0",
     "ejs": "^2.6.1",
     "node-sp-auth-config": "^2.6.0",
