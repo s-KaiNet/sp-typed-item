@@ -7,15 +7,6 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch index.js",
-            "program": "${workspaceFolder}\\lib\\index.js",
-            "outFiles": [
-                "${workspaceFolder}/lib/**/*.js"
-            ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
             "name": "Launch CLI",
             "program": "${workspaceFolder}\\lib\\cli.js",
             "args": [

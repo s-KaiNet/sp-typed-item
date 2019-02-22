@@ -8,7 +8,6 @@
       "always"
     ],
     "await-promise": [true, "Bluebird"],
-    "file-name-casing": [true, {".tsx": "pascal-case", ".ts": "camel-case"}],
     "space-before-function-paren": [
       false
     ],

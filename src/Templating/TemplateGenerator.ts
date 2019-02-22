@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as ejs from 'ejs';
 
 import { Config } from '../Interfaces/Config';
-import { Entity } from '../Interfaces/output/Entity';
+import { Entity } from '../Interfaces/Output/Entity';
 import { LISTS_OUTPUT, CONTENT_TYPES_OUTPUT } from '../Common/Consts';
 
 export class TemplateGenerator {

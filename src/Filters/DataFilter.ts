@@ -1,10 +1,10 @@
 import { ListSetting } from '../Interfaces/FistSetting';
 import { SPService } from '../Common/SPService';
-import { Entity } from '../Interfaces/output/Entity';
+import { Entity } from '../Interfaces/Output/Entity';
 import { removeSlashes } from '../Common/Utils';
 import { Field } from '../Interfaces/Field';
 import { FieldSetting } from '../Interfaces/FieldSetting';
-import { Field as FieldEntity } from '../Interfaces/output/Field';
+import { Field as FieldEntity } from '../Interfaces/Output/Field';
 import { ContentTypeSetting } from '../Interfaces/ContentTypeSetting';
 
 export class DataFilter {
