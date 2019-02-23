@@ -25,9 +25,9 @@ export class DataFilter {
         let entities: Entity[] = [];
 
         for (const listSetting of listSettings) {
-            let url = removeSlashes(listSetting.url);
+            let url = removeSlashes(listSetting.url).toLowerCase();
             for (const list of lists) {
-                let listRelativeUrl = removeSlashes(list.RootFolder.ServerRelativeUrl.replace(serverRelativeUrl, ''));
+                let listRelativeUrl = removeSlashes(list.RootFolder.ServerRelativeUrl.replace(serverRelativeUrl, '')).toLowerCase();
                 if (listRelativeUrl === url) {
                     let entity: Entity = {
                         name: list.Title,
@@ -80,26 +80,23 @@ export class DataFilter {
         let fieldEntities: FieldEntity[] = [];
 
         for (const field of fields) {
+            let fieldEntity: FieldEntity = {
+                entityPropertyName: field.EntityPropertyName,
+                fieldType: field.FieldTypeKind,
+                fieldTypeName: field.TypeAsString
+            };
+
             if (!fieldSetting) {
-                fieldEntities.push({
-                    entityPropertyName: field.EntityPropertyName,
-                    fieldType: field.FieldTypeKind
-                });
+                fieldEntities.push(fieldEntity);
             } else {
                 if ((fieldSetting.excludeHidden && field.Hidden)) {
                     continue;
                 }
 
                 if (!fieldSetting.exclude || fieldSetting.exclude.length === 0) {
-                    fieldEntities.push({
-                        entityPropertyName: field.EntityPropertyName,
-                        fieldType: field.FieldTypeKind
-                    });
+                    fieldEntities.push(fieldEntity);
                 } else if (fieldSetting.exclude.indexOf(field.InternalName) === -1) {
-                    fieldEntities.push({
-                        entityPropertyName: field.EntityPropertyName,
-                        fieldType: field.FieldTypeKind
-                    });
+                    fieldEntities.push(fieldEntity);
                 }
             }
         }

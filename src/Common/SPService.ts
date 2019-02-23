@@ -28,7 +28,13 @@ export class SPService {
     public async getContentTypes(): Promise<ContentType[]> {
         let request = await this.createRequest();
 
-        return (await request.get(`${this.siteUrl}/_api/web/ContentTypes?$select=Id,Hidden,Name`)).body.d.results;
+        return (await request.get(`${this.siteUrl}/_api/web/ContentTypes?$select=Id,Hidden,Name`)).body.d.results.map((c: any) => {
+            return {
+                Hidden: c.Hidden,
+                Id: c.Id.StringValue,
+                Name: c.Name
+            } as ContentType;
+        });
     }
 
     public async getListFields(listTitle: string): Promise<Field[]> {

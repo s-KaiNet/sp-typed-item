@@ -1,7 +1,7 @@
 let Ajv = require('ajv');
 import { Config } from '../Interfaces/Config';
 
-const schema: any = require('./sp-typed-item.schema.json');
+const schema: any = require('../../schemas/sp-typed-item.schema.json');
 
 export class JsonSchemaValidator {
     public static validate(config: Config[]): {valid: boolean, errors: any} {

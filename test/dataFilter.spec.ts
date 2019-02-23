@@ -108,6 +108,28 @@ describe('Data filter tests', () => {
             expect(value.length).equal(1);
         });
 
+        it('should ignore case', async () => {
+            let service = new SPService('', '');
+            let dataFilter = new DataFilter(service);
+            stub(SPService.prototype, 'getLists').returns(Promise.resolve<List[]>([{
+                Hidden: false,
+                Id: 'id',
+                RootFolder: {
+                    Name: '',
+                    ServerRelativeUrl: 'sites/dev/Lists/MyList'
+                },
+                Title: 'List'
+            }]));
+            stub(SPService.prototype, 'getWebServerRelativeUrl').returns(Promise.resolve<string>('/sites/dev/'));
+            stub(SPService.prototype, 'getListFields').returns(Promise.resolve<Field[]>([]));
+
+            let value = await dataFilter.filterLists([{
+                url: 'lists/MyList'
+            }]);
+
+            expect(value.length).equal(1);
+        });
+
         it('should return two lists', async () => {
             let service = new SPService('', '');
             let dataFilter = new DataFilter(service);

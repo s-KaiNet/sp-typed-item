@@ -9,5 +9,13 @@
         "**/.DS_Store": true,
         "lib": true
     },
-    "editor.wordWrap": "on"
+    "editor.wordWrap": "on",
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/config/sp-typed-item.config.json"
+            ],
+            "url": "./schemas/sp-typed-item.schema.json"
+        }
+    ]
 }

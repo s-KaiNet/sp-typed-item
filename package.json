@@ -10,12 +10,12 @@
     "test": "mocha",
     "coverage": "nyc --report-dir coverage/output mocha",
     "test:dev": "mocha --watch-extensions ts --watch",
-    "watch-ejs": "onchange \"src/**/*.ejs\" -- copyfiles -u 1 -V {{changed}} lib\"",
+    "watch-ejs": "onchange -a \"src/**/*.ejs\" -- copyfiles -u 1 -V {{changed}} lib\"",
     "watch-ts": "tsc -p tsconfig.json -w --preserveWatchOutput true",
     "watch": "concurrently npm:watch-*"
   },
   "bin": {
-    "sp-item": "lib/cli.js"
+    "spitem": "lib/cli.js"
   },
   "repository": {
     "type": "git",
@@ -74,17 +74,19 @@
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.3.3"
+    "typescript": "^3.3.3333"
   },
   "dependencies": {
     "@types/ejs": "^2.6.2",
+    "@types/mkdirp": "^0.5.2",
+    "@types/rimraf": "^2.0.2",
     "@types/sharepoint": "^2016.1.2",
     "ajv": "^6.9.1",
     "chalk": "^2.4.2",
     "commander": "^2.19.0",
     "ejs": "^2.6.1",
-    "mkdirp": "^0.5.1",
-    "node-sp-auth-config": "^2.6.0",
+    "node-sp-auth-config": "^2.6.1",
+    "rimraf": "^2.6.3",
     "sp-request": "^2.1.3"
   }
 }

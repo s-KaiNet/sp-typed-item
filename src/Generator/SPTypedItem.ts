@@ -6,7 +6,7 @@ import { JsonSchemaValidator } from '../JsonValidation/JsonSchemaValidator';
 import { TemplateGenerator } from '../Templating/TemplateGenerator';
 
 export class SPTypedItem {
-    public static async RenderFiles(config: Config): Promise<any> {
+    public static async renderFiles(config: Config): Promise<any> {
         if (!config.lists && !config.contentTypes) {
             LogManager.instance.error('Provide either "lists" or "contentTypes" node for sp-typed-item configuration.');
             return;
@@ -25,6 +25,6 @@ export class SPTypedItem {
         let listEntities = await dataFilter.filterLists(config.lists);
         let contentTypeEntities = await dataFilter.filterConentTypes(config.contentTypes);
 
-        TemplateGenerator.renderTemplates(config, listEntities, contentTypeEntities);
+        await TemplateGenerator.renderTemplates(config, listEntities, contentTypeEntities);
     }
 }

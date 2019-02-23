@@ -19,7 +19,8 @@ describe('Validator tests', () => {
     it('should set valid state', () => {
         let result = JsonSchemaValidator.validate([{
             outputPath: '',
-            siteUrl: ''
+            siteUrl: '',
+            authConfigPath: ''
         } as Config]);
         expect(result.valid).equal(true);
     });
@@ -28,6 +29,7 @@ describe('Validator tests', () => {
         let result = JsonSchemaValidator.validate([{
             outputPath: '',
             siteUrl: '',
+            authConfigPath: '',
             lists: [
                 {
 
@@ -41,6 +43,7 @@ describe('Validator tests', () => {
         let result = JsonSchemaValidator.validate([{
             outputPath: '',
             siteUrl: '',
+            authConfigPath: '',
             lists: [
                 {
                     url: 'my list'

@@ -10,11 +10,14 @@
             "name": "Launch CLI",
             "program": "${workspaceFolder}\\lib\\cli.js",
             "args": [
-                "--file myfile.txt"
+                "render",
+                "--config",
+                "./config/sp-typed-item.config.json"
             ],
             "outFiles": [
                 "${workspaceFolder}/lib/**/*.js"
-            ]
+            ],
+            "smartStep": false
         },
         {
             "name": "Mocha tests",
