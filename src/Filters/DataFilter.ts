@@ -1,11 +1,12 @@
 import { ListSetting } from '../Interfaces/FistSetting';
 import { SPService } from '../Common/SPService';
 import { Entity } from '../Interfaces/Output/Entity';
-import { removeSlashes } from '../Common/Utils';
+import { removeSlashes, sanitizeUrl, removeExtraSymbols } from '../Common/Utils';
 import { Field } from '../Interfaces/Field';
 import { FieldSetting } from '../Interfaces/FieldSetting';
 import { Field as FieldEntity } from '../Interfaces/Output/Field';
 import { ContentTypeSetting } from '../Interfaces/ContentTypeSetting';
+import { SUPPORTED_FIELD_TYPES, NOT_SUPPORTED_FIELD_TYPE } from '../Common/Consts';
 
 export class DataFilter {
     constructor(private service: SPService) { }
@@ -29,13 +30,15 @@ export class DataFilter {
             for (const list of lists) {
                 let listRelativeUrl = removeSlashes(list.RootFolder.ServerRelativeUrl.replace(serverRelativeUrl, '')).toLowerCase();
                 if (listRelativeUrl === url) {
+                    let urlParts = list.RootFolder.ServerRelativeUrl.split('/');
                     let entity: Entity = {
-                        name: list.Title,
-                        fields: null
+                        name: sanitizeUrl(urlParts[urlParts.length - 1]),
+                        fields: null,
+                        fileName: listSetting.fileName
                     };
                     entities.push(entity);
 
-                    let listFields = await this.service.getListFields(list.Title);
+                    let listFields = await this.service.getListFields(list.RootFolder.ServerRelativeUrl);
                     entity.fields = this.populateFields(listFields, listSetting.fields);
                 }
             }
@@ -62,8 +65,9 @@ export class DataFilter {
             for (const contentType of contentTypes) {
                 if (id === contentType.Id) {
                     let entity: Entity = {
-                        name: contentType.Name,
-                        fields: null
+                        name: removeExtraSymbols(contentType.Name),
+                        fields: null,
+                        fileName: contentTypeSetting.fileName
                     };
                     entities.push(entity);
 
@@ -80,10 +84,12 @@ export class DataFilter {
         let fieldEntities: FieldEntity[] = [];
 
         for (const field of fields) {
+            let fieldTypeName = field.TypeAsString.toLowerCase();
+            let isFieldSupported = this.isFieldSupported(field.TypeAsString.toLowerCase());
             let fieldEntity: FieldEntity = {
                 entityPropertyName: field.EntityPropertyName,
                 fieldType: field.FieldTypeKind,
-                fieldTypeName: field.TypeAsString
+                fieldTypeName: this.isFieldSupported(fieldTypeName) ? fieldTypeName : NOT_SUPPORTED_FIELD_TYPE
             };
 
             if (!fieldSetting) {
@@ -102,5 +108,9 @@ export class DataFilter {
         }
 
         return fieldEntities;
+    }
+
+    private isFieldSupported(type: string): boolean {
+        return SUPPORTED_FIELD_TYPES.indexOf(type) !== -1;
     }
 }

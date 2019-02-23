@@ -1,6 +1,6 @@
 import { FieldSetting } from './FieldSetting';
+import { Setting } from './Setting';
 
-export interface ContentTypeSetting {
+export interface ContentTypeSetting extends Setting {
     id: string;
-    fields?: FieldSetting;
 }

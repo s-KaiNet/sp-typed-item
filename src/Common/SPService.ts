@@ -37,10 +37,10 @@ export class SPService {
         });
     }
 
-    public async getListFields(listTitle: string): Promise<Field[]> {
+    public async getListFields(listUrl: string): Promise<Field[]> {
         let request = await this.createRequest();
 
-        return (await request.get(`${this.siteUrl}/_api/web/lists/getByTitle('${listTitle}')/fields?$select=Id,Hidden,InternalName,EntityPropertyName,Required,Title,FieldTypeKind,TypeAsString`)).body.d.results;
+        return (await request.get(`${this.siteUrl}/_api/web/GetList('${listUrl}')/fields?$select=Id,Hidden,InternalName,EntityPropertyName,Required,Title,FieldTypeKind,TypeAsString`)).body.d.results;
     }
 
     public async getContentTypeFields(id: string): Promise<Field[]> {

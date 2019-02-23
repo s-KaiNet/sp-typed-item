@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { removeSlashes } from '../src/Common/Utils';
+import { removeSlashes, sanitizeUrl } from '../src/Common/Utils';
 
 describe('Utils tests', () => {
 
@@ -43,5 +43,17 @@ describe('Utils tests', () => {
         let value = removeSlashes(null);
 
         expect(value).equal(null);
+    });
+
+    it('should remove space', () => {
+        let value = sanitizeUrl('m m');
+
+        expect(value).equal('mm');
+    });
+
+    it('should decode uri and sanitize', () => {
+        let value = sanitizeUrl('m%20m');
+
+        expect(value).equal('mm');
     });
 });

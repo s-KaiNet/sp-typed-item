@@ -5,7 +5,7 @@ import * as ejs from 'ejs';
 import { Config } from '../Interfaces/Config';
 import { Entity } from '../Interfaces/Output/Entity';
 import { LISTS_OUTPUT, CONTENT_TYPES_OUTPUT } from '../Common/Consts';
-import { removeDirectory, addDirectory } from '../Common/Utils';
+import { removeDirectory, addDirectory, removeExtraSymbols } from '../Common/Utils';
 
 export class TemplateGenerator {
     public static async renderTemplates(config: Config, lists: Entity[], contentTypes: Entity[]): Promise<void> {
@@ -33,7 +33,7 @@ export class TemplateGenerator {
 
         for (const contentType of contentTypes) {
             let result = template(contentType);
-            fs.writeFileSync(path.resolve(contentTypesOutputPath, `${contentType.name}.ts`), result);
+            fs.writeFileSync(path.resolve(contentTypesOutputPath, `${contentType.fileName ? contentType.fileName : removeExtraSymbols(contentType.name)}.ts`), result);
         }
     }
 
@@ -50,7 +50,7 @@ export class TemplateGenerator {
 
         for (const list of lists) {
             let result = template(list);
-            fs.writeFileSync(path.resolve(listsOutputPath, `${list.name}.ts`), result);
+            fs.writeFileSync(path.resolve(listsOutputPath, `${list.fileName ? list.fileName : list.name}.ts`), result);
         }
     }
 }

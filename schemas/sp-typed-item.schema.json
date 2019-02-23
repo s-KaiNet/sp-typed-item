@@ -66,6 +66,16 @@
               ],
               "pattern": "^(.*)$"
             },
+            "fileName": {
+              "$id": "#/items/properties/lists/items/properties/fileName",
+              "type": "string",
+              "title": "The filename Schema",
+              "default": "",
+              "examples": [
+                "MyList.ts"
+              ],
+              "pattern": "^(.*)$"
+            },
             "fields": {
               "$id": "#/items/properties/lists/items/properties/fields",
               "type": "object",
@@ -119,6 +129,16 @@
               "default": "",
               "examples": [
                 "0x001234545"
+              ],
+              "pattern": "^(.*)$"
+            },
+            "fileName": {
+              "$id": "#/items/properties/lists/items/properties/fileName",
+              "type": "string",
+              "title": "The filename Schema",
+              "default": "",
+              "examples": [
+                "MyList.ts"
               ],
               "pattern": "^(.*)$"
             },

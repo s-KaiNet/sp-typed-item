@@ -1,6 +1,5 @@
-import { FieldSetting } from './FieldSetting';
+import { Setting } from './Setting';
 
-export interface ListSetting {
+export interface ListSetting extends Setting {
     url: string;
-    fields?: FieldSetting;
 }
