@@ -6,7 +6,8 @@ import { Field } from '../Interfaces/Field';
 import { FieldSetting } from '../Interfaces/FieldSetting';
 import { Field as FieldEntity } from '../Interfaces/Output/Field';
 import { ContentTypeSetting } from '../Interfaces/ContentTypeSetting';
-import { SUPPORTED_FIELD_TYPES, NOT_SUPPORTED_FIELD_TYPE } from '../Common/Consts';
+import { FIELD_TYPE_TO_TEMPLATE_MAPPINGS, UNSUPPORTED_FIELD_TYPE_TEMPLATE } from '../Common/Consts';
+import { LogManager } from '../Logging/LogManager';
 
 export class DataFilter {
     constructor(private service: SPService) { }
@@ -34,12 +35,14 @@ export class DataFilter {
                     let entity: Entity = {
                         name: sanitizeUrl(urlParts[urlParts.length - 1]),
                         fields: null,
-                        fileName: listSetting.fileName
+                        fileName: listSetting.fileName,
+                        hasUrl: false,
+                        hasGeoLocation: false
                     };
                     entities.push(entity);
 
                     let listFields = await this.service.getListFields(list.RootFolder.ServerRelativeUrl);
-                    entity.fields = this.populateFields(listFields, listSetting.fields);
+                    this.populateFields(entity, listFields, listSetting.fields);
                 }
             }
         }
@@ -67,12 +70,14 @@ export class DataFilter {
                     let entity: Entity = {
                         name: removeExtraSymbols(contentType.Name),
                         fields: null,
-                        fileName: contentTypeSetting.fileName
+                        fileName: contentTypeSetting.fileName,
+                        hasUrl: false,
+                        hasGeoLocation: false
                     };
                     entities.push(entity);
 
                     let listFields = await this.service.getContentTypeFields(id);
-                    entity.fields = this.populateFields(listFields, contentTypeSetting.fields);
+                    this.populateFields(entity, listFields, contentTypeSetting.fields);
                 }
             }
         }
@@ -80,17 +85,22 @@ export class DataFilter {
         return entities;
     }
 
-    private populateFields(fields: Field[], fieldSetting: FieldSetting): FieldEntity[] {
+    private populateFields(entity: Entity, fields: Field[], fieldSetting: FieldSetting): void {
         let fieldEntities: FieldEntity[] = [];
 
         for (const field of fields) {
             let fieldTypeName = field.TypeAsString.toLowerCase();
-            let isFieldSupported = this.isFieldSupported(field.TypeAsString.toLowerCase());
             let fieldEntity: FieldEntity = {
                 entityPropertyName: field.EntityPropertyName,
                 fieldType: field.FieldTypeKind,
-                fieldTypeName: this.isFieldSupported(fieldTypeName) ? fieldTypeName : NOT_SUPPORTED_FIELD_TYPE
+                fieldTypeName: fieldTypeName,
+                template: FIELD_TYPE_TO_TEMPLATE_MAPPINGS[fieldTypeName]
             };
+
+            if (!fieldEntity.template) {
+                LogManager.instance.error('Received unsupported field type: ' + fieldTypeName);
+                fieldEntity.template = UNSUPPORTED_FIELD_TYPE_TEMPLATE;
+            }
 
             if (!fieldSetting) {
                 fieldEntities.push(fieldEntity);
@@ -107,10 +117,8 @@ export class DataFilter {
             }
         }
 
-        return fieldEntities;
-    }
-
-    private isFieldSupported(type: string): boolean {
-        return SUPPORTED_FIELD_TYPES.indexOf(type) !== -1;
+        entity.fields = fieldEntities;
+        entity.hasUrl = fieldEntities.filter(e => e.fieldTypeName === 'url').length > 0;
+        entity.hasGeoLocation = fieldEntities.filter(e => e.fieldTypeName === 'geolocation').length > 0;
     }
 }

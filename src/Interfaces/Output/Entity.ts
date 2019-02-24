@@ -4,4 +4,6 @@ export interface Entity {
     name: string;
     fields: Field[];
     fileName: string;
+    hasUrl: boolean;
+    hasGeoLocation: boolean;
 }

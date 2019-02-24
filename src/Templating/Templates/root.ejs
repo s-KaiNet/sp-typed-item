@@ -1,4 +1,6 @@
-export interface <%= name %> {
+<%if (hasUrl) {%>import { Url } from '../Url';
+<% } %><%if (hasGeoLocation) {%>import { GeoLocation } from '../Location';
+<% } %>export interface <%= name %> {
     <% fields.forEach(function(field) { %>
-    <%- include('Fields/' + field.fieldTypeName, {field: field}) %><% }); %>
+    <%- include('Fields/' + field.template, {field: field}) %><% }); %>
 }

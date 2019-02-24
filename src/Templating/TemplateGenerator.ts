@@ -11,6 +11,9 @@ export class TemplateGenerator {
     public static async renderTemplates(config: Config, lists: Entity[], contentTypes: Entity[]): Promise<void> {
         let outputPath = path.resolve(config.outputPath);
         await removeDirectory(outputPath);
+        await addDirectory(outputPath);
+
+        await this.renderHelperInterfaces(config);
 
         if (lists.length > 0) {
             await this.renderLists(config, lists);
@@ -19,6 +22,18 @@ export class TemplateGenerator {
         if (contentTypes.length > 0) {
             await this.renderContentTypes(config, contentTypes);
         }
+    }
+
+    private static async renderHelperInterfaces(config: Config): Promise<void> {
+        let templateString = fs.readFileSync(path.resolve(__dirname, './Templates/url.ejs')).toString();
+        let template = ejs.compile(templateString);
+        let result = template();
+        fs.writeFileSync(path.resolve(config.outputPath, 'Url.ts'), result);
+
+        templateString = fs.readFileSync(path.resolve(__dirname, './Templates/location.ejs')).toString();
+        template = ejs.compile(templateString);
+        result = template();
+        fs.writeFileSync(path.resolve(config.outputPath, 'Location.ts'), result);
     }
 
     private static async renderContentTypes(config: Config, contentTypes: Entity[]): Promise<void> {

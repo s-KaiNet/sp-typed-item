@@ -1,5 +1,46 @@
 export const VSCODE_INDICATOR = 'SP_ITEM_VSCODE';
 export const LISTS_OUTPUT = 'Lists';
 export const CONTENT_TYPES_OUTPUT = 'ContentTypes';
-export const SUPPORTED_FIELD_TYPES = ['integer', 'text'];
-export const NOT_SUPPORTED_FIELD_TYPE = 'not_supported';
+export const UNSUPPORTED_FIELD_TYPE_TEMPLATE = 'not_supported';
+export const FIELD_TYPE_TO_TEMPLATE_MAPPINGS: {[key: string]: string} = {
+    invalid: UNSUPPORTED_FIELD_TYPE_TEMPLATE,
+    integer: 'number',
+    text: 'text',
+    note: 'text',
+    datetime: 'datetime',
+    counter: 'number',
+    choice: 'text',
+    lookup: 'lookup',
+    boolean: 'boolean',
+    number: 'number',
+    currency: 'text',
+    url: 'url',
+    computed: 'text',
+    threading: 'not_supported',
+    guid: 'text',
+    multichoice: 'string_multi',
+    gridchoice: 'text',
+    calculated: 'text',
+    file: 'not_supported',
+    attachments: 'not_supported',
+    user: 'user',
+    recurrence: 'not_supported',
+    crossprojectLink: 'not_supported',
+    modstat: 'not_supported',
+    error: 'not_supported',
+    contenttypeid: 'text',
+    pageseparator: 'not_supported',
+    threadindex: 'not_supported',
+    workflowstatus: 'text',
+    alldayevent: 'not_supported',
+    workfloweventtype: 'not_supported',
+    geolocation: 'geolocation',
+    outcomechoice: 'text',
+    maxitems: 'not_supported',
+    // special cases
+    taxonomyfieldtype: 'taxonomy',
+    taxonomyfieldtypemulti: 'taxonomy_multi',
+    lookupmulti: 'lookup_multi',
+    usermulti: 'user_multi',
+    location: 'text'
+};
