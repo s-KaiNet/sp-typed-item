@@ -26,14 +26,25 @@ export class TemplateGenerator {
 
     private static async renderHelperInterfaces(config: Config): Promise<void> {
         let templateString = fs.readFileSync(path.resolve(__dirname, './Templates/url.ejs')).toString();
-        let template = ejs.compile(templateString);
+        let template = ejs.compile(templateString, {
+            filename: path.resolve(__dirname, './Templates/url.ejs')
+        });
         let result = template();
         fs.writeFileSync(path.resolve(config.outputPath, 'Url.ts'), result);
 
         templateString = fs.readFileSync(path.resolve(__dirname, './Templates/location.ejs')).toString();
-        template = ejs.compile(templateString);
+        template = ejs.compile(templateString, {
+            filename: path.resolve(__dirname, './Templates/location.ejs')
+        });
         result = template();
         fs.writeFileSync(path.resolve(config.outputPath, 'Location.ts'), result);
+
+        templateString = fs.readFileSync(path.resolve(__dirname, './Templates/metadata.ejs')).toString();
+        template = ejs.compile(templateString, {
+            filename: path.resolve(__dirname, './Templates/metadata.ejs')
+        });
+        result = template();
+        fs.writeFileSync(path.resolve(config.outputPath, 'Metadata.ts'), result);
     }
 
     private static async renderContentTypes(config: Config, contentTypes: Entity[]): Promise<void> {

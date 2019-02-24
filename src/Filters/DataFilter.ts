@@ -8,8 +8,13 @@ import { Field as FieldEntity } from '../Interfaces/Output/Field';
 import { ContentTypeSetting } from '../Interfaces/ContentTypeSetting';
 import { FIELD_TYPE_TO_TEMPLATE_MAPPINGS, UNSUPPORTED_FIELD_TYPE_TEMPLATE } from '../Common/Consts';
 import { LogManager } from '../Logging/LogManager';
+import { FieldType } from '../types/SP';
 
 export class DataFilter {
+
+    private SUPPORTED_LOOKUP_FIELDS = ['FileRef', 'FileDirRef', 'Last_x0020_Modified', 'Created_x0020_Date', 'FSObjType', 'UniqueId'];
+    private NOT_SUPPORTED_FIELDS = ['_EditMenuTableStart', '_EditMenuTableStart2', '_EditMenuTableEnd', '_ComplianceFlags', '_ComplianceTag', '_ComplianceTagWrittenTime', '_ComplianceTagUserId', 'LinkFilenameNoMenu', 'LinkFilename', 'LinkFilename2', 'LinkTitleNoMenu', 'LinkTitle', 'LinkTitle2'];
+
     constructor(private service: SPService) { }
 
     public async filterLists(listSettings?: ListSetting[]): Promise<Entity[]> {
@@ -37,7 +42,8 @@ export class DataFilter {
                         fields: null,
                         fileName: listSetting.fileName,
                         hasUrl: false,
-                        hasGeoLocation: false
+                        hasGeoLocation: false,
+                        hasTaxonomy: false
                     };
                     entities.push(entity);
 
@@ -72,7 +78,8 @@ export class DataFilter {
                         fields: null,
                         fileName: contentTypeSetting.fileName,
                         hasUrl: false,
-                        hasGeoLocation: false
+                        hasGeoLocation: false,
+                        hasTaxonomy: false
                     };
                     entities.push(entity);
 
@@ -89,6 +96,10 @@ export class DataFilter {
         let fieldEntities: FieldEntity[] = [];
 
         for (const field of fields) {
+            if (!this.isFieldSupported(field)) {
+                continue;
+            }
+
             let fieldTypeName = field.TypeAsString.toLowerCase();
             let fieldEntity: FieldEntity = {
                 entityPropertyName: field.EntityPropertyName,
@@ -120,5 +131,33 @@ export class DataFilter {
         entity.fields = fieldEntities;
         entity.hasUrl = fieldEntities.filter(e => e.fieldTypeName === 'url').length > 0;
         entity.hasGeoLocation = fieldEntities.filter(e => e.fieldTypeName === 'geolocation').length > 0;
+        entity.hasTaxonomy = fieldEntities.filter(e => e.fieldTypeName === 'taxonomyfieldtype' || e.fieldTypeName === 'taxonomyfieldtypemulti').length > 0;
+    }
+
+    private isFieldSupported(field: Field): boolean {
+        if (this.SUPPORTED_LOOKUP_FIELDS.indexOf(field.InternalName) !== -1) {
+            field.FieldTypeKind = FieldType.text;
+            field.TypeAsString = 'text';
+
+            if (field.InternalName === 'FSObjType') {
+                field.FieldTypeKind = FieldType.number;
+                field.TypeAsString = 'number';
+            }
+            return true;
+        }
+
+        if (this.NOT_SUPPORTED_FIELDS.indexOf(field.InternalName) !== -1) {
+            return false;
+        }
+
+        let isSystemDocsListLookup = field.SchemaXml.indexOf('List="Docs"') !== -1;
+        let isLookupListEmpty = !field.LookupList;
+        let isLookup = field.FieldTypeKind === FieldType.lookup;
+
+        if (isLookup && isLookupListEmpty && isSystemDocsListLookup && field.Hidden) {
+            return false;
+        }
+
+        return true;
     }
 }

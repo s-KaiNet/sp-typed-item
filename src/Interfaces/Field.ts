@@ -9,4 +9,6 @@ export interface Field {
     Title: string;
     TypeAsString: string;
     FieldTypeKind: FieldType;
+    SchemaXml: string;
+    LookupList: string;
 }

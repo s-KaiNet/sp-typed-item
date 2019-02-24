@@ -9,6 +9,8 @@ export class SPService {
     private siteUrl: string;
     private request: sprequest.ISPRequest;
 
+    private FIELDS_SELECT = '$select=Id,Hidden,InternalName,EntityPropertyName,Required,Title,FieldTypeKind,TypeAsString,SchemaXml,LookupList';
+
     constructor(private authConfigPath: string, siteUrl: string) {
         this.siteUrl = removeSlashes(siteUrl);
     }
@@ -40,13 +42,13 @@ export class SPService {
     public async getListFields(listUrl: string): Promise<Field[]> {
         let request = await this.createRequest();
 
-        return (await request.get(`${this.siteUrl}/_api/web/GetList('${listUrl}')/fields?$select=Id,Hidden,InternalName,EntityPropertyName,Required,Title,FieldTypeKind,TypeAsString`)).body.d.results;
+        return (await request.get(`${this.siteUrl}/_api/web/GetList('${listUrl}')/fields?${this.FIELDS_SELECT}`)).body.d.results;
     }
 
     public async getContentTypeFields(id: string): Promise<Field[]> {
         let request = await this.createRequest();
 
-        return (await request.get(`${this.siteUrl}/_api/web/ContentTypes/GetById('${id}')/fields?$select=Id,Hidden,InternalName,EntityPropertyName,Required,Title,FieldTypeKind,TypeAsString`)).body.d.results;
+        return (await request.get(`${this.siteUrl}/_api/web/ContentTypes/GetById('${id}')/fields?${this.FIELDS_SELECT}`)).body.d.results;
     }
 
     private async createRequest(): Promise<sprequest.ISPRequest> {

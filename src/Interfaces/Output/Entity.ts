@@ -5,5 +5,6 @@ export interface Entity {
     fields: Field[];
     fileName: string;
     hasUrl: boolean;
+    hasTaxonomy: boolean;
     hasGeoLocation: boolean;
 }
