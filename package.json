@@ -5,6 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "vscode:prepublish": "npm run build",
     "build": "tsc -p tsconfig.json",
     "cli": "ts-node src/index.ts",
     "test": "mocha",
@@ -14,6 +16,23 @@
     "watch-ts": "tsc -p tsconfig.json -w --preserveWatchOutput true",
     "watch": "concurrently npm:watch-*"
   },
+  "engines": {
+    "vscode": "^1.31.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "activationEvents": [
+    "onCommand:extension.helloWorld"
+  ],
   "bin": {
     "spitem": "lib/cli.js"
   },
@@ -74,7 +93,8 @@
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.3333",
+    "vscode": "^1.1.30"
   },
   "dependencies": {
     "@types/ejs": "^2.6.2",
