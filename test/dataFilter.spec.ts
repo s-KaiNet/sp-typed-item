@@ -182,7 +182,9 @@ describe('Data filter tests', () => {
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: false,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field]));
 
             let value = await dataFilter.filterLists([{
@@ -213,13 +215,17 @@ describe('Data filter tests', () => {
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: false,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field, {
                 InternalName: 'MyF',
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: false,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field]));
 
             let value = await dataFilter.filterLists([{
@@ -250,7 +256,9 @@ describe('Data filter tests', () => {
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: true,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field]));
 
             let value = await dataFilter.filterLists([{
@@ -282,21 +290,27 @@ describe('Data filter tests', () => {
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: true,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field,
             {
                 InternalName: 'Id',
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: false,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field,
             {
                 InternalName: 'MyF',
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: false,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field]));
 
             let value = await dataFilter.filterLists([{
@@ -328,7 +342,9 @@ describe('Data filter tests', () => {
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: false,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field]));
 
             let value = await dataFilter.filterLists([{
@@ -356,13 +372,17 @@ describe('Data filter tests', () => {
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: true,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field, {
                 InternalName: 'Id',
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: false,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field]));
 
             let value = await dataFilter.filterLists([{
@@ -408,13 +428,17 @@ describe('Data filter tests', () => {
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: true,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field, {
                 InternalName: 'Id',
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: false,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field]));
 
             let value = await dataFilter.filterConentTypes([{
@@ -440,13 +464,17 @@ describe('Data filter tests', () => {
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: true,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field, {
                 InternalName: 'Id',
                 EntityPropertyName: '',
                 FieldTypeKind: FieldType.integer,
                 Hidden: false,
-                Id: ''
+                Id: '',
+                SchemaXml: '',
+                TypeAsString: 'text'
             } as Field]));
 
             let value = await dataFilter.filterConentTypes([{
