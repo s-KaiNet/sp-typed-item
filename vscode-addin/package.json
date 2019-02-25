@@ -3,6 +3,8 @@
 	"displayName": "SharePoint Typed Item",
 	"description": "Generates strongly typed interfaces based on SharePoint data",
 	"version": "0.0.1",
+	"author": "Sergei Sergeev <sergeev.srg@gmail.com> (https://github.com/s-KaiNet)",
+	"license": "MIT",
 	"engines": {
 		"vscode": "^1.31.0"
 	},
@@ -21,7 +23,7 @@
 				"title": "SharePoint Typed Item Configuration",
 				"type": "object",
 				"properties": {
-					"spTypedItem.config": {
+					"sp-typed-item.config": {
 						"type": "array",
 						"title": "SharePoint Typed Item Configuration Root",
 						"description": "Contains array of SharePoint Typed Item configuration.",
@@ -167,9 +169,12 @@
 							}
 						}
 					},
-					"spTypedItem.configPath": {
+					"sp-typed-item.configPath": {
 						"type": "string",
-						"default": "./config/sp-typed-item.json",
+						"default": null,
+						"examples": [
+							"./config/sp-typed-item.json"
+						],
 						"description": "The path to your SharePoint Typed Item configuration file"
 					}
 				}
@@ -201,10 +206,14 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"typescript": "^3.1.4",
-		"vscode": "^1.1.25",
-		"tslint": "^5.8.0",
+		"@types/mocha": "^2.2.42",
 		"@types/node": "^8.10.25",
-		"@types/mocha": "^2.2.42"
+		"tslint": "^5.8.0",
+		"tslint-config-standard": "^8.0.1",
+		"typescript": "^3.1.4",
+		"vscode": "^1.1.25"
+	},
+	"dependencies": {
+		"bluebird": "^3.5.3"
 	}
 }

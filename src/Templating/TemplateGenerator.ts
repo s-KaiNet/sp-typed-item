@@ -1,11 +1,15 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as ejs from 'ejs';
+import { promisify } from 'bluebird';
 
 import { Config } from '../Interfaces/Config';
 import { Entity } from '../Interfaces/Output/Entity';
 import { LISTS_OUTPUT, CONTENT_TYPES_OUTPUT } from '../Common/Consts';
 import { removeDirectory, addDirectory, removeExtraSymbols } from '../Common/Utils';
+
+let readFileAsync = promisify<any, string, any>(fs.readFile);
+let writeFileAsync = promisify<void, string, any>(fs.writeFile);
 
 export class TemplateGenerator {
     public static async renderTemplates(config: Config, lists: Entity[], contentTypes: Entity[]): Promise<void> {
@@ -25,26 +29,26 @@ export class TemplateGenerator {
     }
 
     private static async renderHelperInterfaces(config: Config): Promise<void> {
-        let templateString = fs.readFileSync(path.resolve(__dirname, './Templates/url.ejs')).toString();
+        let templateString = (await readFileAsync(path.resolve(__dirname, './Templates/url.ejs'), null)).toString();
         let template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/url.ejs')
         });
         let result = template();
-        fs.writeFileSync(path.resolve(config.outputPath, 'Url.ts'), result);
+        await writeFileAsync(path.resolve(config.outputPath, 'Url.ts'), result);
 
-        templateString = fs.readFileSync(path.resolve(__dirname, './Templates/location.ejs')).toString();
+        templateString = (await readFileAsync(path.resolve(__dirname, './Templates/location.ejs'), null)).toString();
         template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/location.ejs')
         });
         result = template();
-        fs.writeFileSync(path.resolve(config.outputPath, 'Location.ts'), result);
+        await writeFileAsync(path.resolve(config.outputPath, 'Location.ts'), result);
 
-        templateString = fs.readFileSync(path.resolve(__dirname, './Templates/metadata.ejs')).toString();
+        templateString = (await readFileAsync(path.resolve(__dirname, './Templates/metadata.ejs'), null)).toString();
         template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/metadata.ejs')
         });
         result = template();
-        fs.writeFileSync(path.resolve(config.outputPath, 'Metadata.ts'), result);
+        await writeFileAsync(path.resolve(config.outputPath, 'Metadata.ts'), result);
     }
 
     private static async renderContentTypes(config: Config, contentTypes: Entity[]): Promise<void> {
@@ -52,14 +56,14 @@ export class TemplateGenerator {
 
         await addDirectory(contentTypesOutputPath);
 
-        let templateString = fs.readFileSync(path.resolve(__dirname, './Templates/root.ejs')).toString();
+        let templateString = (await readFileAsync(path.resolve(__dirname, './Templates/root.ejs'), null)).toString();
         let template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/root.ejs')
         });
 
         for (const contentType of contentTypes) {
             let result = template(contentType);
-            fs.writeFileSync(path.resolve(contentTypesOutputPath, `${contentType.fileName ? contentType.fileName : removeExtraSymbols(contentType.name)}.ts`), result);
+            await writeFileAsync(path.resolve(contentTypesOutputPath, `${contentType.fileName ? contentType.fileName : removeExtraSymbols(contentType.name)}.ts`), result);
         }
     }
 
@@ -69,14 +73,14 @@ export class TemplateGenerator {
 
         await addDirectory(listsOutputPath);
 
-        let templateString = fs.readFileSync(path.resolve(__dirname, './Templates/root.ejs')).toString();
+        let templateString = (await readFileAsync(path.resolve(__dirname, './Templates/root.ejs'), null)).toString();
         let template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/root.ejs')
         });
 
         for (const list of lists) {
             let result = template(list);
-            fs.writeFileSync(path.resolve(listsOutputPath, `${list.fileName ? list.fileName : list.name}.ts`), result);
+            await writeFileAsync(path.resolve(listsOutputPath, `${list.fileName ? list.fileName : list.name}.ts`), result);
         }
     }
 }

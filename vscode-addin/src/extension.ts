@@ -1,17 +1,45 @@
 import * as vscode from 'vscode';
 
+import { LogManager } from 'sp-typed-item';
+import { VSCodeLogger } from './Logging/VSCodeLogger';
+import { GenerateInterfacesCommand } from './Commands/GenerateInterfacesCommand';
+import { Command } from './Commands/Command';
+import { ConfigNotFoundError } from './Common/ConfigNotFoundError';
+
 export function activate(context: vscode.ExtensionContext) {
-		console.log('Congratulations, your extension "sharepoint-typed-item" is now active!');
 
-		let disposable = vscode.commands.registerCommand('extension.generate', () => {
-		// The code you place here will be executed every time your command is executed
+    LogManager.externalLogger = new VSCodeLogger();
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
+    let commands: { [key: string]: new () => Command } = {
+        'extension.generate': GenerateInterfacesCommand
+    };
 
-	context.subscriptions.push(disposable);
+    for (const commandKey in commands) {
+        if (commands.hasOwnProperty(commandKey)) {
+
+            ((command) => {
+                try {
+                    let disposable = vscode.commands.registerCommand(command, async () => {
+                        try {
+                            const vscodeCommand = new commands[command]();
+                            await vscodeCommand.execute();
+                        } catch (error) {
+                            if (error instanceof ConfigNotFoundError) {
+                                LogManager.instance.warn(error.message);
+                                return;
+                            }
+
+                            LogManager.instance.error(`An error occurred during the execution of the command '${command}'`);
+                            LogManager.instance.error(error);
+                        }
+                    });
+
+                    context.subscriptions.push(disposable);
+                } catch (error) {
+                    LogManager.instance.error(error);
+                    throw error;
+                }
+            })(commandKey);
+        }
+    }
 }
-
-// this method is called when your extension is deactivated
-export function deactivate() {}

@@ -1,15 +1,29 @@
 {
+	"extends": [
+	  "tslint-config-standard"
+	],
 	"rules": {
-		"no-string-throw": true,
-		"no-unused-expression": true,
-		"no-duplicate-variable": true,
-		"curly": true,
-		"class-name": true,
-		"semicolon": [
-			true,
-			"always"
-		],
-		"triple-equals": true
-	},
-	"defaultSeverity": "warning"
-}
+	  "semicolon": [
+		true,
+		"always"
+	  ],
+	  "await-promise": [
+		true,
+		"Bluebird"
+	  ],
+	  "space-before-function-paren": [
+		false
+	  ],
+	  "ter-indent": [
+		false
+	  ],
+	  "no-inferrable-types": true,
+	  "strict-type-predicates": false,
+	  "indent": [
+		true,
+		"spaces",
+		2
+	  ],
+	  "no-console": true
+	}
+  }

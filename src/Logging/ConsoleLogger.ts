@@ -4,19 +4,16 @@ import { Logger } from './Logger';
 
 // tslint:disable:no-console
 
-export class ConsoleLogger implements Logger {
+export class ConsoleLogger extends Logger {
     public error(err: any): void {
-        console.log(chalk.red(err));
-
-        if (err && err.stack) {
-            console.log('');
-            console.log('Stack Trace:');
-            console.log(chalk.red(err.stack));
-        }
+        console.log(chalk.red(this.data2String(err)));
     }
 
-    public log(data: string): void {
+    public warn(data: string): void {
+        console.log(chalk.yellow(data));
+    }
+
+    public info(data: string): void {
         console.log(data);
     }
-
 }
