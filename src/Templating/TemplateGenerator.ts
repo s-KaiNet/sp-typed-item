@@ -1,21 +1,25 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as ejs from 'ejs';
-import { promisify } from 'bluebird';
+import * as pify from 'pify';
+import * as mkdirp from 'mkdirp';
+import * as rimraf from 'rimraf';
 
 import { Config } from '../Interfaces/Config';
 import { Entity } from '../Interfaces/Output/Entity';
 import { LISTS_OUTPUT, CONTENT_TYPES_OUTPUT } from '../Common/Consts';
-import { removeDirectory, addDirectory, removeExtraSymbols } from '../Common/Utils';
+import { removeExtraSymbols } from '../Common/Utils';
 
-let readFileAsync = promisify<any, string, any>(fs.readFile);
-let writeFileAsync = promisify<void, string, any>(fs.writeFile);
+let readFileAsync = pify(fs.readFile);
+let writeFileAsync = pify(fs.writeFile);
+let mkdirpAsync = pify(mkdirp);
+let rimrafAsync = pify(rimraf);
 
 export class TemplateGenerator {
     public static async renderTemplates(config: Config, lists: Entity[], contentTypes: Entity[]): Promise<void> {
         let outputPath = path.resolve(config.outputPath);
-        await removeDirectory(outputPath);
-        await addDirectory(outputPath);
+        await rimrafAsync(outputPath);
+        await mkdirpAsync(outputPath);
 
         await this.renderHelperInterfaces(config);
 
@@ -29,21 +33,21 @@ export class TemplateGenerator {
     }
 
     private static async renderHelperInterfaces(config: Config): Promise<void> {
-        let templateString = (await readFileAsync(path.resolve(__dirname, './Templates/url.ejs'), null)).toString();
+        let templateString = (await readFileAsync(path.resolve(__dirname, './Templates/url.ejs'))).toString();
         let template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/url.ejs')
         });
         let result = template();
         await writeFileAsync(path.resolve(config.outputPath, 'Url.ts'), result);
 
-        templateString = (await readFileAsync(path.resolve(__dirname, './Templates/location.ejs'), null)).toString();
+        templateString = (await readFileAsync(path.resolve(__dirname, './Templates/location.ejs'))).toString();
         template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/location.ejs')
         });
         result = template();
         await writeFileAsync(path.resolve(config.outputPath, 'Location.ts'), result);
 
-        templateString = (await readFileAsync(path.resolve(__dirname, './Templates/metadata.ejs'), null)).toString();
+        templateString = (await readFileAsync(path.resolve(__dirname, './Templates/metadata.ejs'))).toString();
         template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/metadata.ejs')
         });
@@ -54,9 +58,9 @@ export class TemplateGenerator {
     private static async renderContentTypes(config: Config, contentTypes: Entity[]): Promise<void> {
         let contentTypesOutputPath = path.resolve(config.outputPath, CONTENT_TYPES_OUTPUT);
 
-        await addDirectory(contentTypesOutputPath);
+        await mkdirpAsync(contentTypesOutputPath);
 
-        let templateString = (await readFileAsync(path.resolve(__dirname, './Templates/root.ejs'), null)).toString();
+        let templateString = (await readFileAsync(path.resolve(__dirname, './Templates/root.ejs'))).toString();
         let template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/root.ejs')
         });
@@ -71,9 +75,9 @@ export class TemplateGenerator {
 
         let listsOutputPath = path.resolve(config.outputPath, LISTS_OUTPUT);
 
-        await addDirectory(listsOutputPath);
+        await mkdirpAsync(listsOutputPath);
 
-        let templateString = (await readFileAsync(path.resolve(__dirname, './Templates/root.ejs'), null)).toString();
+        let templateString = (await readFileAsync(path.resolve(__dirname, './Templates/root.ejs'))).toString();
         let template = ejs.compile(templateString, {
             filename: path.resolve(__dirname, './Templates/root.ejs')
         });

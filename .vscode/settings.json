@@ -1,5 +1,4 @@
 {
-    "tslint.autoFixOnSave": true,
     "files.autoSave": "onFocusChange",
     "files.exclude": {
         "**/.git": true,
@@ -8,6 +7,9 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "lib": true
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.tslint": true
     },
     "editor.wordWrap": "on",
     "json.schemas": [

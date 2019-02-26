@@ -78,13 +78,14 @@
   "dependencies": {
     "@types/ejs": "2.6.2",
     "@types/mkdirp": "0.5.2",
+    "@types/pify": "3.0.2",
     "@types/rimraf": "2.0.2",
     "ajv": "6.9.1",
-    "bluebird": "^3.5.3",
     "chalk": "2.4.2",
     "commander": "2.19.0",
     "ejs": "2.6.1",
     "node-sp-auth-config": "2.6.1",
+    "pify": "4.0.1",
     "rimraf": "2.6.3",
     "sp-request": "2.1.3"
   }

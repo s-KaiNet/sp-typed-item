@@ -3,8 +3,6 @@ import * as vscode from 'vscode';
 import { Logger } from 'sp-typed-item';
 import { EXTENSION_KEY } from '../Common/Consts';
 
-// tslint:disable:no-console
-
 let outputChannel: vscode.OutputChannel;
 
 function getOrCreateOutputChannel() {
