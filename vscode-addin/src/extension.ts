@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { LogManager } from 'sp-typed-item';
+import { LogManager, SchemaValidationError } from 'sp-typed-item';
 import { VSCodeLogger } from './Logging/VSCodeLogger';
 import { GenerateInterfacesCommand } from './Commands/GenerateInterfacesCommand';
 import { Command } from './Commands/Command';
@@ -10,7 +10,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     LogManager.externalLogger = new VSCodeLogger();
 
-    let commands: { [key: string]: new () => Command } = {
+    LogManager.instance.info('activate');
+
+    let commands: { [key: string]: new (context: vscode.ExtensionContext) => Command } = {
         'extension.generate': GenerateInterfacesCommand
     };
 
@@ -21,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
                 try {
                     let disposable = vscode.commands.registerCommand(command, async () => {
                         try {
-                            const vscodeCommand = new commands[command]();
+                            const vscodeCommand = new commands[command](context);
                             await vscodeCommand.execute();
                         } catch (error) {
                             if (error instanceof ConfigNotFoundError) {
@@ -29,8 +31,14 @@ export function activate(context: vscode.ExtensionContext) {
                                 return;
                             }
 
-                            LogManager.instance.error(`An error occurred during the execution of the command '${command}'`);
+                            if (error instanceof SchemaValidationError) {
+                                LogManager.instance.error(error.errors);
+                                LogManager.instance.error('sp-typed-item.json schema validation errors. Errors received: ');
+                                return;
+                            }
+
                             LogManager.instance.error(error);
+                            LogManager.instance.error(`An error occurred during the execution of the command '${command}'${error && error.message ? ': ' + error.message : ''}`);
                         }
                     });
 

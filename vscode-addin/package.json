@@ -12,8 +12,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"workspaceContains:**/sp-typed-item.json",
-		"workspaceContains:**/sp.typed.item.json",
+		"workspaceContains:**/sp-typed-item*.json",
+		"workspaceContains:**/sp.typed.item*.json",
 		"onCommand:extension.generate"
 	],
 	"main": "./out/extension.js",
@@ -182,11 +182,11 @@
 		],
 		"jsonValidation": [
 			{
-				"fileMatch": "sp-typed-item.json",
+				"fileMatch": "**/sp-typed-item*.json",
 				"url": "./node_modules/sp-typed-item/schemas/sp-typed-item.schema.json"
 			},
 			{
-				"fileMatch": "sp.typed.item.json",
+				"fileMatch": "**/sp.typed.item*.json",
 				"url": "./node_modules/sp-typed-item/schemas/sp-typed-item.schema.json"
 			}
 		],
