@@ -1,8 +1,8 @@
 import { AuthContext } from './AuthContext';
 import { Step } from '../Step';
 import { IAdfsUserCredentials } from 'node-sp-auth';
-import { ClientSecretPickStep } from './ClientSecretPickStep';
 import { GenericInputStep } from './GenericInputStep';
+import { AdfsCookieStep } from './AdfsCookieStep';
 
 export class AdfsUrlStep extends GenericInputStep<AuthContext> {
 
@@ -14,8 +14,8 @@ export class AdfsUrlStep extends GenericInputStep<AuthContext> {
     }
 
     protected resolveNextStep(context: AuthContext): Step<AuthContext> {
-        (context.auth as IAdfsUserCredentials).relyingParty = this.input.value;
+        (context.auth as IAdfsUserCredentials).adfsUrl = this.input.value;
 
-        return new ClientSecretPickStep();
+        return new AdfsCookieStep(context);
     }
 }

@@ -19,7 +19,7 @@ export class PasswordPickStep extends GenericInputStep<AuthContext> {
         if (!context.adfs) {
             return null;
         } else {
-            return new RelyingPartyStep();
+            return new RelyingPartyStep(context);
         }
     }
 }

@@ -23,14 +23,14 @@ export class OnlineAuthOptionsStep extends Step<AuthContext> {
         return new Promise((resolve, reject) => {
             let options: vscode.QuickPickItem[] = [{
                 label: PICK_USER_CREDS,
-                description: 'With this option your user name and password will be used to authenticate against target SharePoint site'
+                description: 'Select this option to authenticate with user name and password.'
             }, {
                 label: PICK_ADDIN_CREDS,
-                description: 'With this option ClientId and ClientSecret will be used to authenticate against target SharePoint site'
+                description: 'Select this option to authenticate with ClientId and ClientSecret.'
             }];
 
             let pick = vscode.window.createQuickPick();
-            pick.title = `Select authentication type`;
+            pick.title = `Select authentication type: ${context.config.siteUrl}`;
             pick.ignoreFocusOut = true;
             pick.items = options;
 

@@ -9,22 +9,26 @@ export abstract class GenericInputStep<T extends AuthContext> extends Step<T> {
     constructor(context: T) {
         super();
 
-        let input = vscode.window.createInputBox();
-        input.title = `Target SharePoint site: ${context.config.siteUrl}`;
-        input.ignoreFocusOut = true;
+        this.input = vscode.window.createInputBox();
+        this.input.title = `Target SharePoint site: ${context.config.siteUrl}`;
+        this.input.ignoreFocusOut = true;
     }
 
     public async execute(context: T): Promise<Step<T>> {
         return new Promise((resolve, reject) => {
             this.input.onDidAccept(() => {
                 if (!this.input.value) {
-                    this.input.validationMessage = 'Should\'n be empty';
+                    this.input.validationMessage = 'Should not be empty';
                     return;
                 }
 
                 let next = this.resolveNextStep(context);
                 this.input.dispose();
                 resolve(next);
+            });
+
+            this.input.onDidChangeValue(() => {
+                this.input.validationMessage = null;
             });
 
             this.input.show();

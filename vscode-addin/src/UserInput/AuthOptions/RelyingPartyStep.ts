@@ -9,7 +9,7 @@ export class RelyingPartyStep extends GenericInputStep<AuthContext> {
     constructor(context: AuthContext) {
         super(context);
 
-        this.input.prompt = 'Relying party';
+        this.input.prompt = 'Relying party. For more information visit extension\'s home page.';
         this.input.placeholder = 'urn:sharepoint:portal';
     }
 
