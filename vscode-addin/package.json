@@ -14,7 +14,9 @@
 	"activationEvents": [
 		"workspaceContains:**/sp-typed-item*.json",
 		"workspaceContains:**/sp.typed.item*.json",
-		"onCommand:extension.generate"
+		"onCommand:sp-typed-item.generate",
+		"onCommand:sp-typed-item.resetWorskpace",
+		"onCommand:sp-typed-item.clearCredentials"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -192,8 +194,18 @@
 		],
 		"commands": [
 			{
-				"command": "extension.generate",
+				"command": "sp-typed-item.generate",
 				"title": "Generate interfaces",
+				"category": "SharePoint Typed Item"
+			},
+			{
+				"command": "sp-typed-item.resetWorskpace",
+				"title": "Reset workspace credentials",
+				"category": "SharePoint Typed Item"
+			},
+			{
+				"command": "sp-typed-item.clearCredentials",
+				"title": "Clear all credentials",
 				"category": "SharePoint Typed Item"
 			}
 		]
@@ -208,12 +220,15 @@
 	"devDependencies": {
 		"@types/mocha": "^2.2.42",
 		"@types/node": "^8.10.25",
+		"node-sp-auth": "2.5.7",
 		"tslint": "^5.8.0",
 		"tslint-config-standard": "^8.0.1",
 		"typescript": "^3.1.4",
 		"vscode": "^1.1.25"
 	},
 	"dependencies": {
-		"bluebird": "^3.5.3"
+		"@types/pify": "3.0.2",
+		"node-sp-auth-config": "2.6.1",
+		"pify": "4.0.1"
 	}
 }

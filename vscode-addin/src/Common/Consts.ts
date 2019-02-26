@@ -5,3 +5,4 @@ export const PICK_USER_CREDS = 'User credentials';
 export const PICK_ADDIN_CREDS = 'Add-in authentication';
 export const PICK_NTLM_CREDS = 'NTLM';
 export const PICK_ADFS_CREDS = 'ADFS';
+export const EXTENSION_FOLDER = 'SharePointTypedItem';

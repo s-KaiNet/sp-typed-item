@@ -2,9 +2,11 @@ import * as vscode from 'vscode';
 
 import { LogManager, SchemaValidationError } from 'sp-typed-item';
 import { VSCodeLogger } from './Logging/VSCodeLogger';
-import { GenerateInterfacesCommand } from './Commands/GenerateInterfacesCommand';
-import { Command } from './Commands/Command';
+import { GenerateInterfaces } from './Commands/GenerateInterfaces';
 import { ConfigNotFoundError } from './Common/ConfigNotFoundError';
+import { ResetWorkspaceCredentials } from './Commands/ResetWorkspaceCredentials';
+import { ClearAllCredentials } from './Commands/ClearAllCredentials';
+import { Command } from './Commands/Command';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -13,7 +15,9 @@ export function activate(context: vscode.ExtensionContext) {
     LogManager.instance.info('activate');
 
     let commands: { [key: string]: new (context: vscode.ExtensionContext) => Command } = {
-        'extension.generate': GenerateInterfacesCommand
+        'sp-typed-item.generate': GenerateInterfaces,
+        'sp-typed-item.resetWorskpace': ResetWorkspaceCredentials,
+        'sp-typed-item.clearCredentials': ClearAllCredentials
     };
 
     for (const commandKey in commands) {

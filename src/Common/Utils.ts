@@ -1,6 +1,3 @@
-import * as mkdirp from 'mkdirp';
-import * as rimraf from 'rimraf';
-
 export function removeSlashes(url: string): string {
     if (!url) {
         return url;
