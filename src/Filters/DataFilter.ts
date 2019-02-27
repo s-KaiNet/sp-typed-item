@@ -13,7 +13,7 @@ import { FieldType } from '../types/SP';
 export class DataFilter {
 
     private SUPPORTED_LOOKUP_FIELDS = ['FileRef', 'FileDirRef', 'Last_x0020_Modified', 'Created_x0020_Date', 'FSObjType', 'UniqueId'];
-    private NOT_SUPPORTED_FIELDS = ['_EditMenuTableStart', '_EditMenuTableStart2', '_EditMenuTableEnd', '_ComplianceFlags', '_ComplianceTag', '_ComplianceTagWrittenTime', '_ComplianceTagUserId', 'LinkFilenameNoMenu', 'LinkFilename', 'LinkFilename2', 'LinkTitleNoMenu', 'LinkTitle', 'LinkTitle2'];
+    private NOT_SUPPORTED_FIELDS = ['_EditMenuTableStart', '_EditMenuTableStart2', '_EditMenuTableEnd', '_ComplianceFlags', '_ComplianceTag', '_ComplianceTagWrittenTime', '_ComplianceTagUserId', 'LinkFilenameNoMenu', 'LinkFilename', 'LinkFilename2', 'LinkTitleNoMenu', 'LinkTitle', 'LinkTitle2', 'AppAuthor', 'AppEditor'];
 
     constructor(private service: SPService) { }
 
@@ -33,12 +33,13 @@ export class DataFilter {
 
         for (const listSetting of listSettings) {
             let url = removeSlashes(listSetting.url).toLowerCase();
+            let listWasAdded = false;
             for (const list of lists) {
                 let listRelativeUrl = removeSlashes(list.RootFolder.ServerRelativeUrl.replace(serverRelativeUrl, '')).toLowerCase();
                 if (listRelativeUrl === url) {
                     let urlParts = list.RootFolder.ServerRelativeUrl.split('/');
                     let entity: Entity = {
-                        name: sanitizeUrl(urlParts[urlParts.length - 1]),
+                        name: listSetting.fileName || sanitizeUrl(urlParts[urlParts.length - 1]),
                         fields: null,
                         fileName: listSetting.fileName,
                         hasUrl: false,
@@ -49,7 +50,12 @@ export class DataFilter {
 
                     let listFields = await this.service.getListFields(list.RootFolder.ServerRelativeUrl);
                     this.populateFields(entity, listFields, listSetting.fields);
+                    listWasAdded = true;
                 }
+            }
+
+            if (!listWasAdded) {
+                LogManager.instance.warn(`List with url: '${url}' was not found`);
             }
         }
 
@@ -71,10 +77,11 @@ export class DataFilter {
 
         for (const contentTypeSetting of contentTypeSettings) {
             let id = contentTypeSetting.id;
+            let contentTypeWasAdded = false;
             for (const contentType of contentTypes) {
                 if (id === contentType.Id) {
                     let entity: Entity = {
-                        name: removeExtraSymbols(contentType.Name),
+                        name: contentTypeSetting.fileName || removeExtraSymbols(contentType.Name),
                         fields: null,
                         fileName: contentTypeSetting.fileName,
                         hasUrl: false,
@@ -85,7 +92,12 @@ export class DataFilter {
 
                     let listFields = await this.service.getContentTypeFields(id);
                     this.populateFields(entity, listFields, contentTypeSetting.fields);
+                    contentTypeWasAdded = true;
                 }
+            }
+
+            if (!contentTypeWasAdded) {
+                LogManager.instance.warn(`Content type with id: '${id}' was not found`);
             }
         }
 
