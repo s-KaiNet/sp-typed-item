@@ -229,6 +229,7 @@
 	"dependencies": {
 		"@types/pify": "3.0.2",
 		"node-sp-auth-config": "2.6.1",
-		"pify": "4.0.1"
+		"pify": "4.0.1",
+		"rimraf": "2.6.3"
 	}
 }
