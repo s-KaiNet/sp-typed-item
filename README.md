@@ -4,9 +4,9 @@ Node.js module, CLI and VSCode add-in for generating strongly typed interfaces b
 
 ## How it works
 
-1. You should provide configuration file, which describes your target site url, lists and content types you want to generate interfaces for. 
+1. You should provide a configuration file, which describes your target site url, lists and content types you want to generate interfaces for. 
 2. Run the generation process.
-3. Consume generated interfaces in your project, which deals with SharePoint REST API and list data.
+3. Consume generated interfaces in your project, which deals with SharePoint REST API and list items data.
 
 Checkout how it works in action using VSCode extension:   
 
@@ -20,7 +20,7 @@ Checkout VSCode extension [home page](to be added)
 ### CLI  
 1. Run `$ npm install sp-typed-item -g`
 2. Generate a file with your authentication details. `sp-typed-item` CLI understands format, used by [node-sp-auth-config](https://github.com/koltyakov/node-sp-auth-config) module and supports the same set of authentication options. Generate authentication file with `node-sp-auth-config` CLI: `$ sp-auth init --path auth.private.json`.  Refer to `node-sp-auth-config` home page for usage details. 
-3. Create configuration file `sp-typed-item.json`. Read about configuration file format [further](format). 
+3. Create configuration file `sp-typed-item.json`. Read about configuration file format [further](#Configuration-file). 
 4. Run `$ sp-item render --config path-to-sp-typed-item-config.json`
 
 ### Node.js
@@ -73,13 +73,13 @@ Checkout VSCode extension [home page](to be added)
 ]
 ```
 #### Root element
-Array of configuration items. 
+Array of configuration items. Currently CLI and VSCode extension support only one configuration element. Multiple elements support might come in future.
 #### Configuration item  
 `siteUrl` - required, full url to your target SharePoint site  
 
-`authConfigPath` - path to your json authentication details file. It's not required for VSCode extension, because VSCode extension handles it for you  
+`authConfigPath` - path to your json authentication details file. It's not required for VSCode extension, because VSCode extension handles it for you. This setting contains a path to your `node-sp-auth-config` json file.  
 
-`outputPath` - required, path to a folder, where all interfaces will be generated  
+`outputPath` - required, path to a folder, where all interfaces will be generated.  
 
 `lists` - this node describes all lists, which should be included in generation process. Either `lists` or `contentTypes` node should be provided. Array of configuration items:
 
