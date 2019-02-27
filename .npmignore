@@ -8,4 +8,7 @@ test
 .vscode
 /coverage
 /.nyc_output
+config
+Generated
+assets
 !/lib

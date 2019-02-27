@@ -5,28 +5,25 @@ import { Config } from '../src/Interfaces/Config';
 
 describe('Validator tests', () => {
     it('should not validate empty object', () => {
-        let result = JsonSchemaValidator.validate([{} as Config]);
-        expect(result.valid).equal(false);
+        expect(JsonSchemaValidator.validate.bind(this, [{}])).to.throw();
     });
 
     it('should not validate empty siteUrl', () => {
-        let result = JsonSchemaValidator.validate([{
+        expect(JsonSchemaValidator.validate.bind(this, [{
             outputPath: ''
-        } as Config]);
-        expect(result.valid).equal(false);
+        } as Config])).to.throw();
     });
 
     it('should set valid state', () => {
-        let result = JsonSchemaValidator.validate([{
+        expect(JsonSchemaValidator.validate.bind(this, [{
             outputPath: '',
             siteUrl: '',
             authConfigPath: ''
-        } as Config]);
-        expect(result.valid).equal(true);
+        } as Config])).to.not.throw();
     });
 
     it('should set not valid - no url for list was provided', () => {
-        let result = JsonSchemaValidator.validate([{
+         expect(JsonSchemaValidator.validate.bind(this, [{
             outputPath: '',
             siteUrl: '',
             authConfigPath: '',
@@ -35,12 +32,11 @@ describe('Validator tests', () => {
 
                 }
             ]
-        } as Config]);
-        expect(result.valid).equal(false);
+        } as Config])).to.throw();
     });
 
     it('should set valid - url for list was provided', () => {
-        let result = JsonSchemaValidator.validate([{
+        expect(JsonSchemaValidator.validate.bind(this, [{
             outputPath: '',
             siteUrl: '',
             authConfigPath: '',
@@ -49,7 +45,6 @@ describe('Validator tests', () => {
                     url: 'my list'
                 }
             ]
-        } as Config]);
-        expect(result.valid).equal(true);
+        } as Config])).to.not.throw();
     });
 });

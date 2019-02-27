@@ -1,6 +1,8 @@
 # SharePoint Typed Item
+[![Version](https://vsmarketplacebadge.apphb.com/version/s-kainet.sharepoint-typed-item.svg)](https://marketplace.visualstudio.com/items?itemName=s-kainet.sharepoint-typed-item)
+[![npm version](https://badge.fury.io/js/sp-typed-item.svg)](https://badge.fury.io/js/sp-typed-item)
 
-Node.js module, CLI and VSCode add-in for generating strongly typed interfaces based on SharePoint data.
+Node.js module, CLI and VSCode extension for generating TypeScript interfaces based on SharePoint data.
 
 ## How it works
 
@@ -15,7 +17,7 @@ Checkout how it works in action using VSCode extension:
 ## How to use: 
 ### VSCode 
 
-Checkout VSCode extension [home page](to be added)
+Checkout VSCode extension [home page](https://marketplace.visualstudio.com/items?itemName=s-kainet.sharepoint-typed-item)
 
 ### CLI  
 1. Run `$ npm install sp-typed-item -g`
@@ -37,6 +39,8 @@ Checkout VSCode extension [home page](to be added)
 `sp-typed-item` configuration file holds essential information about environment and interface generation settings. 
 
 ### Example file with all possible settings: 
+<details><summary>Click to expand</summary>  
+
 ```json
 [
   {
@@ -71,7 +75,9 @@ Checkout VSCode extension [home page](to be added)
     ]
   }
 ]
-```
+```  
+</details>  
+
 #### Root element
 Array of configuration items. Currently CLI and VSCode extension support only one configuration element. Multiple elements support might come in future.
 #### Configuration item  
