@@ -1,7 +1,7 @@
 <%- include('header') %>
 
 <%if (hasUrl) {%>import { Url } from '../Url';
-<% } %><%if (hasGeoLocation) {%>import { GeoLocation, Location } from '../Location';
+<% } %><%if (hasGeoLocation) {%>import { GeoLocation } from '../Location';
 <% } %><%if (hasTaxonomy) {%>import { Metadata } from '../Metadata';
 <% } %>export interface <%= name %> {
     <% fields.forEach(function(field) { %>
