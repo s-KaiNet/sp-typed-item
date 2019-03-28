@@ -41,5 +41,8 @@ export const FIELD_TYPE_TO_TEMPLATE_MAPPINGS: {[key: string]: string} = {
     taxonomyfieldtypemulti: 'taxonomy_multi',
     lookupmulti: 'lookup_multi',
     usermulti: 'user_multi',
-    location: 'text'
+    location: 'location',
+    likes: 'number',
+    averagerating: 'number',
+    ratingcount: 'number'
 };
